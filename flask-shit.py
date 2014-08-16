@@ -5,12 +5,14 @@ app = Flask('walkout')
 
 
 from audio import Audio
-import os
+from recognition import Recognize
 
 a = Audio()
 a.convert_mp3_to_wav('run.mp3')
+a.convert_mp3_to_wav('media.mp3')
 
-app.config['UPLOAD_FOLDER'] = 'media/image/'
+recog = Recognize()
+
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 
@@ -22,12 +24,11 @@ def allowed_file(filename):
 def face_dump():
     file = request.files['file']
     if file and allowed_file(file.filename):
-        # import ipdb; ipdb.set_trace()
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+        recog.is_person(file)
     return ''
 
 
-@app.route("/play/<filename>")
+@app.route("/theme/<name>")
 def play_input(filename):
     print('playing ' + filename)
 
