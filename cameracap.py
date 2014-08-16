@@ -4,7 +4,7 @@ import requests
 vc = cv2.VideoCapture(0)
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-service_backend = 'http://10.10.89.99:5000/face/'
+service_backend = 'http://10.10.89.99:5000/face'
 
 
 def detect(img):
@@ -13,6 +13,12 @@ def detect(img):
         return []
     rects[:, 2:] += rects[:, :2]
     return rects
+
+
+def post_to_service(image):
+    files = {'file': image}
+    requests.post(service_backend, files=files)
+
 
 if vc.isOpened():
     rval, frame = vc.read()
@@ -25,8 +31,8 @@ while rval:
     gray = cv2.equalizeHist(gray)
     faces = detect(gray)
     for face in faces:
-        cv2.imwrite('face.png', gray)
-        files = {'file': open('face.png', 'rb')}
-        requests.post(service_backend, files)
+        cv2.imwrite('face.jpg', gray)
+        post_to_service(open('face.png', 'rb'))
+
 
 cv2.destroyWindow("preview")
