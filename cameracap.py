@@ -5,7 +5,7 @@ import time
 vc = cv2.VideoCapture(0)
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-service_backend = 'http://10.10.89.99:5000/face'
+service_backend = 'http://0.0.0.0:80/face'
 
 
 def detect(img):
