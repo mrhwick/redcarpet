@@ -51,10 +51,6 @@ class Audio(object):
 
     def convert_mp3_to_wav(self, mp3_filename):
 
-        # Get the mp3 data.
-
-        sound_file = AudioSegment.from_mp3('media/mp3/' + mp3_filename)
-
         # Slice the file extension.
 
         filename_less_extension = os.path.splitext(mp3_filename)[0]
@@ -63,6 +59,21 @@ class Audio(object):
 
         wav_filename = filename_less_extension + '.wav'
 
+        if os.path.isfile('media/wav/' + wav_filename):
+            return
+
+        # Get the mp3 data.
+
+        sound_file = AudioSegment.from_mp3('media/mp3/' + mp3_filename)
+
+        # Slice the first thirty-five seconds with a fadeout.
+
+        sound_file = sound_file[:35000]
+
+        sound_file = sound_file.fade_out(5000)
+
         # Export the wav version for playback.
 
         sound_file.export('media/wav/' + wav_filename, format='wav')
+
+        print("Exported media/wav/" + wav_filename)

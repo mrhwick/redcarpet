@@ -8,8 +8,18 @@ from audio import Audio
 from recognition import Recognize
 
 a = Audio()
-a.convert_mp3_to_wav('run.mp3')
-a.convert_mp3_to_wav('media.mp3')
+
+playlist = (
+    'run.mp3',
+    'media.mp3',
+    'fall.mp3',
+    'downfall.mp3',
+    'vader.mp3',
+    'girl.mp3',
+)
+
+for mp3 in playlist:
+    a.convert_mp3_to_wav(mp3)
 
 recog = Recognize()
 
@@ -22,8 +32,10 @@ def allowed_file(filename):
 
 @app.route("/face", methods=['POST'])
 def face_dump():
+    print("Getting file from request.")
     file = request.files['file']
     if file and allowed_file(file.filename):
+        print("Checking for face.")
         recog.is_person(file)
     return ''
 
@@ -40,4 +52,4 @@ def play_input(filename):
     return 'playing ' + filename
 
 if __name__ == "__main__":
-  app.run(host='0.0.0.0')
+  app.run(host='0.0.0.0', port=80)

@@ -14,7 +14,11 @@ class Recognize(object):
     def __init__(self):
         self.audio = Audio()
         self.people={
-            'Anthony Blardo': 'media.wav'
+            'Anthony Blardo': 'downfall.wav',
+            'Matt Hardwick': 'fall.wav',
+            'Daniel Hawkins': 'media.wav',
+            'Allan Davis': 'vader.wav',
+            'Tiffanie Robinson': 'girl.wav',
         }
 
     def is_person(self, image_file):
@@ -26,7 +30,11 @@ class Recognize(object):
         f = File(path)
         api = API(API_KEY, API_SECRET, SERVER)
 
+        print("Sending face to api")
+
         response = api.recognition.identify(group_name='Hackathoners', img=f)
+
+        print(response)
 
         faces = response['face']
         if len(faces) > 0:
@@ -34,5 +42,10 @@ class Recognize(object):
             name = face['candidate'][0]['person_name']
 
             if name in self.people.keys():
+                print("Found " + name)
                 self.audio.add_to_playlist(self.people[name])
                 self.audio.play()
+            else:
+                self.audio.add_to_playlist('run.wav')
+                self.audio.play()
+                print("Did not match a person.")
